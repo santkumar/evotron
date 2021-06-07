@@ -14,14 +14,14 @@ fprintf(logFileID,'-------------------------------------------------------\r\n')
 
 %% Commands 
 % NOTE: Must end with ? and must contain only two alphabets
-cmdStartSampling = 'ss?';
-cmdCytoAcquisitionStarted = 'cas?';
-cmdCytoAcquisitionFinished = 'caf?';
-cmdRemoveWaste = 'rw?';
-cmdCleanNeedle = 'cn?';
-cmdDone = 'd?';
-cmdMoveNeedleForSampling = 'mnfs?';
-cmdError = 'err?';
+cmdStartSampling = "ss?";
+cmdCytoAcquisitionStarted = "as?";
+cmdCytoAcquisitionFinished = "af?";
+cmdRemoveWaste = "rw?";
+cmdCleanNeedle = "cn?";
+cmdDone = "dn?";
+cmdMoveNeedleForSampling = "mn?";
+cmdError = "er?";
 
 %% Open communication port with arduino
 delete(instrfind());                            % delete all previous connections
@@ -33,13 +33,13 @@ write(arduinoComm,cmdStartSampling,"string");   % send command to arduino to sta
 fprintf(logFileID,[datestr(datetime) ' Sent command for sampling\r\n']);
 while(~arduinoComm.NumBytesAvailable)           % wait until sampling is done
 end
-ack = read(arduinoComm,5,"string")             % length of cmdDone is 2
+ack = read(arduinoComm,3,"string")             % length of cmdDone is 3
 
 % test
 % flush(arduinoComm);
 while(~arduinoComm.NumBytesAvailable)           % wait until sampling is done
 end
-ack2 = read(arduinoComm,2,"string")             % length of cmdDone is 2
+ack2 = read(arduinoComm,3,"string")             % length of cmdDone is 3
 
 
 % if strcmp(ack,cmdDone)

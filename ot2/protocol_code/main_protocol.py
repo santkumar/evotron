@@ -5,13 +5,13 @@ from opentrons import protocol_api, types
 metadata = {'apiLevel': '2.0'}
 
 xy_locationVial1 = types.Point(200,200,245)
-z_locationVial1 = types.Point(200,200,30)
+z_locationVial1 = types.Point(200,200,150)
 dippingTimeSeconds = 5
 xySpeed = 100
 zSpeed = 50
-cmdMoveNeedleForSampling = "mnfs?"
-cmdDone = "d?"
-cmdError = "err?"
+cmdMoveNeedleForSampling = "mn?"
+cmdDone = "dn?"
+cmdError = "er?"
 
 def collect_sample(protocol):
     print("Collecting sample!")
@@ -35,13 +35,12 @@ def run(protocol: protocol_api.ProtocolContext):
                     while arduino.inWaiting()==0: pass
                     if arduino.inWaiting()>0:
                         inputStringArduino = arduino.readline()
-                        print(inputStringArduino)
-                        if inputStringArduino == cmdMoveNeedleForSampling:
+                        print(inputStringArduino.decode('utf-8'))
+                        if inputStringArduino.decode('utf-8') == cmdMoveNeedleForSampling:
                             if collect_sample(protocol):
-                                arduino.write(cmdDone)
+                                arduino.write(cmdDone.encode())
                             else :
-                                arduino.write(cmdError)
+                                arduino.write(cmdError.encode())
                         arduino.flushInput()
             except KeyboardInterrupt:
                 print("Keyboard interrupt has been caught!")
-
