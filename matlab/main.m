@@ -13,26 +13,43 @@ fprintf(logFileID, [datestr(datetime) ' Auto-sampling for eVOLVER log file\r\n']
 fprintf(logFileID,'-------------------------------------------------------\r\n');
 
 %% Commands 
-% NOTE: Must end with ?
-cmdStartSampling = 's?';
-cmdCytoAcquisitionStarted = 'q?';
-cmdCytoAcquisitionFinished = 'f?';
-cmdRemoveWaste = 'r?';
-cmdCleanNeedle = 'c?';
+% NOTE: Must end with ? and must contain only two alphabets
+cmdStartSampling = 'ss?';
+cmdCytoAcquisitionStarted = 'cas?';
+cmdCytoAcquisitionFinished = 'caf?';
+cmdRemoveWaste = 'rw?';
+cmdCleanNeedle = 'cn?';
 cmdDone = 'd?';
+cmdMoveNeedleForSampling = 'mnfs?';
+cmdError = 'err?';
 
 %% Open communication port with arduino
-delete(instrfind());                % delete all previous connections
-arduinoComm = serial('COM20');      % check COM port with serialportlist("available") command
-fopen(arduinoComm);                 % open the port handle
+delete(instrfind());                            % delete all previous connections
+arduinoComm = serialport('COM20',9600);         % check COM port with serialportlist("available") command
+flush(arduinoComm);
 
 %% Sampling loop
-fprintf(arduinoComm,cmdStartSampling);  % send command to arduino to start sampling
+write(arduinoComm,cmdStartSampling,"string");   % send command to arduino to start sampling
 fprintf(logFileID,[datestr(datetime) ' Sent command for sampling\r\n']);
-while(~arduinoComm.BytesAvailable)      % wait until sampling is done
+while(~arduinoComm.NumBytesAvailable)           % wait until sampling is done
 end
-flushinput(arduinoComm);
-fprintf(logFileID,[datestr(datetime) ' Sampling done\r\n']);
+ack = read(arduinoComm,5,"string")             % length of cmdDone is 2
+
+% test
+% flush(arduinoComm);
+while(~arduinoComm.NumBytesAvailable)           % wait until sampling is done
+end
+ack2 = read(arduinoComm,2,"string")             % length of cmdDone is 2
+
+
+% if strcmp(ack,cmdDone)
+%     fprintf(logFileID,[datestr(datetime) ' Sampling done\r\n']);
+% else
+%     fprintf(logFileID,[datestr(datetime) ' ERROR in start-sampling, Received ack from arduino: ' ack '\r\n']);
+%     error('Error in start-sampling!');
+% end
+% flush(arduinoComm);
+% ack = [];
 
 %% Flow cytometer acquisition
 % start cyto acquisition
