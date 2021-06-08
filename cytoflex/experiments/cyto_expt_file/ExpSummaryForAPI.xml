@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<Experiment xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Plates>
+    <Plate Name="01">
+      <Tubes>
+        <Tube Name="01-Well-A1" SignalStatisticsSettingId="0" />
+      </Tubes>
+    </Plate>
+  </Plates>
+  <Populations>
+    <Population Name="FSCH-SSCH" />
+    <Population Name="finalGates" />
+    <Population Name="SSCW" />
+    <Population Name="induced" />
+    <Population Name="Basal" />
+    <Population Name="P6" />
+    <Population Name="P7" />
+    <Population Name="aboveBackground" />
+  </Populations>
+  <StatisticsSettings>
+    <TubeHeaderItems>
+      <TubeHeaderItem>EventsCount</TubeHeaderItem>
+      <TubeHeaderItem>RecordTime</TubeHeaderItem>
+      <TubeHeaderItem>Volume</TubeHeaderItem>
+      <TubeHeaderItem>AbortRate</TubeHeaderItem>
+    </TubeHeaderItems>
+    <PopulationStatisticsItems>
+      <PopulationStatisticsItem>Count</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfParent</PopulationStatisticsItem>
+      <PopulationStatisticsItem>PercentOfAll</PopulationStatisticsItem>
+      <PopulationStatisticsItem>Concentration</PopulationStatisticsItem>
+    </PopulationStatisticsItems>
+    <SignalStatisticsSettings>
+      <SignalStatisticsSetting Id="0">
+        <SignalStatisticsSettingInfos />
+      </SignalStatisticsSetting>
+    </SignalStatisticsSettings>
+  </StatisticsSettings>
+</Experiment>

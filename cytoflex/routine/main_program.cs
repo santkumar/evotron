@@ -13,6 +13,7 @@ namespace cyto_control
             public static bool isActionComplete = false;
             public static bool isServerReady = false;
             public static bool isInstrumentStandBy = false;
+            public static bool isTubeRecordResultGenerated = false;
         }
 
         public static void OnActionCompleted(object sender, CytExpertAPI.API.ActionCompletedEventArgs e)
@@ -50,6 +51,11 @@ namespace cyto_control
         public static void OnTubeRecordResultGenerated(object sender, CytExpertAPI.API.TubeRecordResultGeneratedEventArgs e)
         {
             Console.WriteLine("On Tube Record Result Generated");
+            GlobalFlag.isTubeRecordResultGenerated = e.Message.ActionSuccess;
+            Console.WriteLine(e.Message.ActionSuccess);
+            Console.WriteLine(e.Message);
+            CytExpertAPI.Messages.TubeRecordGeneratedMessage _tubeRecordGeneratedMessage = (CytExpertAPI.Messages.TubeRecordGeneratedMessage)e.Message;
+            System.IO.File.WriteAllText(@"C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml", _tubeRecordGeneratedMessage.DesiredXmlResult);
         }
 
         static void Main(string[] args)
@@ -70,7 +76,7 @@ namespace cyto_control
             while ((GlobalFlag.isServerReady & GlobalFlag.isInstrumentStandBy) == false) ;
             Console.WriteLine("Connection Successful!");
 
-            string strFilePath = @"C:\my_git_repo\evotron\cytoflex\experiments\Exp_20210608_1.xit";            
+            string strFilePath = @"C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit";            
             int check2 = _cytExpertAutomation.OpenExperiment(strFilePath);
             Console.WriteLine(check2);
             while (GlobalFlag.isActionComplete == false) ;
@@ -81,7 +87,7 @@ namespace cyto_control
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
 
-            int check4 = _cytExpertAutomation.EjectPlate();
+/*            int check4 = _cytExpertAutomation.EjectPlate();
             Console.WriteLine(check4);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
@@ -92,11 +98,11 @@ namespace cyto_control
             Console.WriteLine(check5);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
-
+*/
             string _plateID = "testID1234";
             string _plateName = "01";
             // string _xmlDesiredResult; // = "<?xml version="1.0"?> <CytExpertAutomation Revision="1.0"> <DesiredAcquisitionResults> </DesiredAcquisitionResults> </CytExpertAutomation>";
-            string _xmlDesiredResult = System.IO.File.ReadAllText("C:/Users/santsa/Desktop/auto_sampler/cytoflex_control/test_xml_desired_result.xml");
+            string _xmlDesiredResult = System.IO.File.ReadAllText(@"C:\my_git_repo\evotron\cytoflex\experiments\xml_desired_result.xml");
             // Console.WriteLine(_xmlDesirecResult);
             int check6 =_cytExpertAutomation.AutoRecord(_plateID, _plateName, _xmlDesiredResult, out IEnumerable<string> _xsdErrorList);
             Console.WriteLine(check6);
@@ -104,26 +110,11 @@ namespace cyto_control
             GlobalFlag.isActionComplete = false;
             // Console.WriteLine(_xsdErrorList.ElementAt(0));
 
-
             // System.Threading.Thread.Sleep(10000);
             int check7 = _cytExpertAutomation.Disconnect();
             Console.WriteLine(check7);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
-
-            /*
-                        int check4 = _cytExpertAutomation.EjectPlate();
-                                    Console.WriteLine(check4);
-                                    while (GlobalFlag.isActionComplete == false) ;
-                                    GlobalFlag.isActionComplete = false;
-
-                        System.Threading.Thread.Sleep(5000);
-
-                                    int check5 = _cytExpertAutomation.LoadPlate();
-                                    Console.WriteLine(check5);
-                                    while (GlobalFlag.isActionComplete == false) ;
-                                    GlobalFlag.isActionComplete = false;
-              */
 
         }
     }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CytExpertAutomation>
+  <DesiredAcquisitionResults>
+    <DesiredAcquisitionResult>
+      <Summary TubeName = "01-Well-A1" AbortRate="" EventsCount="" RecordTime="" Volume="" />
+      <Statistics>
+        <Statistic Signal = "" Population = "" StatisticType = "Count"/>
+        <Statistic Signal = "" Population = "" StatisticType = "PercentOfAll"/>
+        <Statistic Signal = "FSC-A" Population = "FSCH-SSCH" StatisticType = "Mean"/>
+        <Statistic Signal = "" Population = "finalGates" StatisticType = "Count"/>
+        <Statistic Signal = "" Population = "SSCW" StatisticType = ""/>
+        <Statistic Signal = "" Population = "induced" StatisticType = ""/>
+        <Statistic Signal = "" Population = "Basal" StatisticType = ""/>
+        <Statistic Signal = "" Population = "P6" StatisticType = ""/>
+        <Statistic Signal = "" Population = "P7" StatisticType = ""/>
+        <Statistic Signal = "" Population = "aboveBackground" StatisticType = ""/>
+      </Statistics>
+    </DesiredAcquisitionResult>
+  </DesiredAcquisitionResults>
+</CytExpertAutomation>

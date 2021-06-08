@@ -89,7 +89,7 @@ void loop() {
 
     int check1 = serialEventComputer();
     if (stringCompleteComputer){
-      // computerSerial.print(inputStringComputer);
+      computerSerial.print(inputStringComputer);
       if (compareCmds(inputStringComputer,cmdStartSampling)){        
         computerSerial.print(cmdMoveNeedleForSampling);
         startSamplingPump();

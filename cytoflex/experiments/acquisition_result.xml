@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<CytExpertAutomation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DesiredAcquisitionResult>
+    <Summary TubeName="01-Well-A1" PlateID="testID1234" PlateName="01" WellLabel="A1" AbortRate="0" RecordTime="30" Volume="5.000004" EventsCount="5" />
+    <Statistics>
+      <Statistic Signal="" Population="" StatisticType="Count" Value="5" />
+      <Statistic Signal="" Population="" StatisticType="PercentOfAll" Value="1" />
+      <Statistic Signal="FSC-A" Population="FSCH-SSCH" StatisticType="Mean" Value="" />
+      <Statistic Signal="" Population="finalGates" StatisticType="Count" Value="0" />
+      <Statistic Signal="" Population="SSCW" StatisticType="" />
+      <Statistic Signal="" Population="induced" StatisticType="" />
+      <Statistic Signal="" Population="Basal" StatisticType="" />
+      <Statistic Signal="" Population="P6" StatisticType="" />
+      <Statistic Signal="" Population="P7" StatisticType="" />
+      <Statistic Signal="" Population="aboveBackground" StatisticType="" />
+    </Statistics>
+  </DesiredAcquisitionResult>
+</CytExpertAutomation>
