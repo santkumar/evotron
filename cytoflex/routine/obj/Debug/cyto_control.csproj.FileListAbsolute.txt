@@ -1,0 +1,9 @@
+C:\my_git_repo\evotron\cytoflex\routine\bin\Debug\automation_v1.exe.config
+C:\my_git_repo\evotron\cytoflex\routine\bin\Debug\automation_v1.exe
+C:\my_git_repo\evotron\cytoflex\routine\bin\Debug\automation_v1.pdb
+C:\my_git_repo\evotron\cytoflex\routine\bin\Debug\CytExpertAPI.dll
+C:\my_git_repo\evotron\cytoflex\routine\obj\Debug\cyto_control.csprojAssemblyReference.cache
+C:\my_git_repo\evotron\cytoflex\routine\obj\Debug\cyto_control.csproj.CoreCompileInputs.cache
+C:\my_git_repo\evotron\cytoflex\routine\obj\Debug\cyto_control.csproj.CopyComplete
+C:\my_git_repo\evotron\cytoflex\routine\obj\Debug\automation_v1.exe
+C:\my_git_repo\evotron\cytoflex\routine\obj\Debug\automation_v1.pdb

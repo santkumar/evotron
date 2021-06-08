@@ -1,0 +1,9 @@
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\bin\Debug\automation_v1.exe.config
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\bin\Debug\automation_v1.exe
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\bin\Debug\automation_v1.pdb
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\bin\Debug\CytExpertAPI.dll
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\obj\Debug\automation_v1.csprojAssemblyReference.cache
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\obj\Debug\automation_v1.csproj.CoreCompileInputs.cache
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\obj\Debug\automation_v1.csproj.CopyComplete
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\obj\Debug\automation_v1.exe
+C:\Users\santsa\Desktop\auto_sampler\cytoflex_control\msvs2017_projects\automation1\automation_v1\obj\Debug\automation_v1.pdb
