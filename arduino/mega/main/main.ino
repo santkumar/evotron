@@ -1,5 +1,16 @@
 #include <SoftwareSerial.h>
 
+// Pinouts
+const int samplingPumpEnablePin = 2;
+const int samplingPumpSpeedPin = 5;
+
+// Durations (in milli-seconds)
+const int t_samplingPumpStart = 500;
+const int t_samplingPumpON = 5000;
+
+// Pump Speed (0 to 255)
+const int samplingPumpSpeed = 255;
+
 // String Input
 String inputStringComputer = "";         // a string to store incoming data from Computer 
 String inputStringOpentron = "";         // a string to store incoming data from Opentron 
@@ -8,57 +19,98 @@ boolean stringCompleteOpentron = false;  // whether the string is complete (from
 
 // Commands
 String cmdStartSampling = "ss?";
-String cmdCytoAcquisitionStarted = "cas?";
-String cmdCytoAcquisitionFinished = "caf?";
+String cmdCytoAcquisitionStarted = "as?";
+String cmdCytoAcquisitionFinished = "af?";
 String cmdRemoveWaste = "rw?";
 String cmdCleanNeedle = "cn?";
-String cmdDone = "d?";
-String cmdMoveNeedleForSampling = "mnfs?";
+String cmdDone = "dn?";
+String cmdMoveNeedleForSampling = "mn?";
+String cmdError = "er?";
 
-// SoftwareSerial computerSerial(10, 11); // RX, TX (connection with Computer)
+// SoftwareSerial Serial1(10, 11); // RX, TX (connection with Computer)
 
-void setup() {
-  Serial1.begin(9600);
-  Serial.begin(9600);
-  inputStringComputer.reserve(100);  
-  inputStringOpentron.reserve(100);  
-  //while(!computerSerial);
-  //while(!Serial);
-}
-
-
-void loop() {
-
-    if (stringCompleteComputer){
-      //if (inputStringComputer==cmdStartSampling){        
-        // Serial.print(cmdMoveNeedleForSampling);
-        //while(!serialEventOpentron()){}
-        Serial1.print(cmdDone);
-        stringCompleteComputer = false;
-        inputStringComputer = "";
-        delay(100);
-      //}  
-    } 
-}
-
-void serialEvent1() {
+boolean serialEventComputer() {
   while (Serial1.available()) {
     char inChar = (char)Serial1.read();
     inputStringComputer += inChar;
     if (inChar == '?') {
       stringCompleteComputer = true;
-      break;
+      return true;
     }
   }
+  return false;
 }
 
-void serialEvent() {
+boolean serialEventOpentron() {
   while (Serial.available()) {
     char inChar = (char)Serial.read();
     inputStringOpentron += inChar;
     if (inChar == '?') {
       stringCompleteOpentron = true;
-      break;
+      return true;
     }
   }
+  return false;
 }
+
+boolean compareCmds(String str1, String str2){
+  int i;
+  int len1 = sizeof(str1);
+  int len2 = sizeof(str2);
+  if (len1!=len2) return false;
+  for (i=0; i<len1; i++) if (str1[i]!=str2[i]) return false;
+  return true;
+}
+
+void startSamplingPump(){
+  analogWrite(samplingPumpSpeedPin,samplingPumpSpeed);
+  digitalWrite(samplingPumpEnablePin, LOW); // turn ON sampling pump
+  delay(t_samplingPumpStart);  
+}
+
+void stopSamplingPump(){
+  digitalWrite(samplingPumpEnablePin, HIGH);
+  analogWrite(samplingPumpSpeedPin,0);
+}
+
+void setup() {
+  Serial1.begin(9600);
+  Serial.begin(9600);
+  inputStringComputer.reserve(50);  
+  inputStringOpentron.reserve(50);  
+  //while(!Serial1);
+  //while(!Serial);
+  pinMode(samplingPumpEnablePin, OUTPUT);
+  digitalWrite(samplingPumpEnablePin, HIGH);
+  pinMode(samplingPumpSpeedPin, OUTPUT);
+}
+
+void loop() {
+
+    while(!serialEventComputer()){}
+    if (stringCompleteComputer){
+      Serial1.print(inputStringComputer);
+      Serial.print(inputStringComputer);
+      if (compareCmds(inputStringComputer,cmdStartSampling)){        
+        Serial1.print(cmdMoveNeedleForSampling);
+        startSamplingPump();
+        Serial.print(cmdMoveNeedleForSampling);
+        while(!serialEventOpentron()){}
+        if (stringCompleteOpentron){
+          if (compareCmds(inputStringOpentron,cmdDone)){
+            delay(t_samplingPumpON);
+            analogWrite(samplingPumpSpeedPin,100);
+            delay(t_samplingPumpON);
+            stopSamplingPump();          
+            Serial1.print(cmdDone);
+            stringCompleteOpentron = false;
+            inputStringOpentron = "";            
+          }
+        }
+        stringCompleteComputer = false;
+        inputStringComputer = "";
+        delay(100);
+      }  
+    }
+  
+} 
