@@ -2,14 +2,19 @@
 
 // Pinouts
 const int samplingPumpEnablePin = 2;
-const int samplingPumpSpeedPin = 5;
+const int samplingPumpSpeedPin = 3;   //PWM
+const int wastePumpDirectionPin = 8;
+const int wastePumpSpeedPin = 9;      //PWM
 
 // Durations (in milli-seconds)
 const int t_samplingPumpStart = 500;
 const int t_samplingPumpON = 5000;
+const int t_wastePumpStart = 500;
+const int t_wastePumpON = 5000;
 
 // Pump Speed (0 to 255)
 const int samplingPumpSpeed = 255;
+const int wastePumpSpeed = 255;
 
 // String Input
 String inputStringComputer = "";         // a string to store incoming data from Computer 
@@ -71,6 +76,16 @@ void startSamplingPump(){
 void stopSamplingPump(){
   digitalWrite(samplingPumpEnablePin, HIGH);
   analogWrite(samplingPumpSpeedPin,0);
+}
+
+void startWastePump(){
+  digitalWrite(wastePumpDirectionPin, HIGH);
+  analogWrite(wastePumpSpeedPin, wastePumpSpeed); // turn ON waste pump
+  delay(t_wastePumpStart);
+}
+
+void stopWastePump(){
+  analogWrite(wastePumpSpeedPin, 0);  
 }
 
 void setup() {
