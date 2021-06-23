@@ -4,16 +4,15 @@
     <DesiredAcquisitionResult>
       <Summary TubeName = "01-Well-A1" AbortRate="" EventsCount="" RecordTime="" Volume="" />
       <Statistics>
-        <Statistic Signal = "" Population = "" StatisticType = "Count"/>
-        <Statistic Signal = "" Population = "" StatisticType = "PercentOfAll"/>
-        <Statistic Signal = "FSC-A" Population = "FSCH-SSCH" StatisticType = "Mean"/>
-        <Statistic Signal = "" Population = "finalGates" StatisticType = "Count"/>
-        <Statistic Signal = "" Population = "SSCW" StatisticType = ""/>
-        <Statistic Signal = "" Population = "induced" StatisticType = ""/>
-        <Statistic Signal = "" Population = "Basal" StatisticType = ""/>
-        <Statistic Signal = "" Population = "P6" StatisticType = ""/>
-        <Statistic Signal = "" Population = "P7" StatisticType = ""/>
-        <Statistic Signal = "" Population = "aboveBackground" StatisticType = ""/>
+        <Statistic Signal = "" Population = "P2 AND P4" StatisticType = "Count"/>
+        <Statistic Signal = "GFP-A" Population = "V1L" StatisticType = "Median"/>
+        <Statistic Signal = "GFP-A" Population = "V1R" StatisticType = "Median"/>
+        <Statistic Signal = "" Population = "V1L" StatisticType = "PercentOfParent"/>
+        <Statistic Signal = "" Population = "V1R" StatisticType = "PercentOfParent"/>
+        <Statistic Signal = "PE-A" Population = "V3L" StatisticType = "Median"/>
+        <Statistic Signal = "PE-A" Population = "V3R" StatisticType = "Median"/>
+        <Statistic Signal = "" Population = "V3L" StatisticType = "PercentOfParent"/>
+        <Statistic Signal = "" Population = "V3R" StatisticType = "PercentOfParent"/>
       </Statistics>
     </DesiredAcquisitionResult>
   </DesiredAcquisitionResults>

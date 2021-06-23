@@ -1,0 +1,8 @@
+
+# 1 ml is too much...try 300 ul: 2 seconds dipping time
+# lower wait times for sampling pump
+# set up evolver computer
+# optimize calibration
+# order caps
+# save fcs file
+

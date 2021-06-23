@@ -25,6 +25,8 @@ delete(instrfind());                            % delete all previous connection
 arduinoComm = serialport('COM19',9600);         % check COM port with serialportlist("available") command
 flush(arduinoComm);
 
+count = 1;
+%%
 while 1
 tic;    
 
@@ -66,11 +68,27 @@ ack = [];
 %% if done sampling then start cytoflex acquisition
 % start cyto acquisition
 fprintf(logFileID,[datestr(datetime) ' Cytoflex acquisition started\r\n']);
-
-% done cyto acquisition
+save C:\my_git_repo\evotron\matlab\comm_folder_1\comm_check.mat count
+while 1
+    check1 = dir('C:\my_git_repo\evotron\matlab\comm_folder_2');
+    if length(check1)>2
+        break;
+    end
+end
 fprintf(logFileID,[datestr(datetime) ' Cytoflex acquisition done\r\n']);
-
-pause(20); % just for test
+delete('C:\my_git_repo\evotron\matlab\comm_folder_2\*');
+  
+% system("C:\my_git_repo\evotron\cytoflex\routine\bin\Release\automation_v1.exe");
+% delete('C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit');
+% delete('C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file\01-Well-A1.fcs');
+% copyfile('C:\my_git_repo\evotron\cytoflex\experiments\sample_experiments\2021_06_23\cyto_expt_file.xit', ... 
+%     'C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit'); 
+% copyfile('C:\my_git_repo\evotron\cytoflex\experiments\sample_experiments\2021_06_23\01-Well-A1.fcs', ... 
+%     'C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file\01-Well-A1.fcs');
+% copyfile('C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml', ...
+%     ['C:\my_git_repo\evotron\cytoflex\experiments\results\acquisition_result_' num2str(count) '.xml']);
+% delete('C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml');
+% fprintf(logFileID,[datestr(datetime) ' Cytoflex acquisition done\r\n']);
 
 %% if done cytoflex acquisition then
 write(arduinoComm,cmdRemoveSampleAndClean,"string");   % send command to arduino to start sampling
@@ -96,5 +114,11 @@ end
 flush(arduinoComm);
 ack = [];
 
+ 
 toc;
+
+display(['Done sampling: ' num2str(count)]);
+count = count + 1;
+
+pause(1800);
 end
