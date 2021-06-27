@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 <CytExpertAutomation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <DesiredAcquisitionResult>
-    <Summary TubeName="01-Well-A1" PlateID="testID1234" PlateName="01" WellLabel="A1" AbortRate="0.01946723" RecordTime="59.99878" Volume="9.999784" EventsCount="73286" />
+    <Summary TubeName="01-Well-A1" PlateID="testID1234" PlateName="01" WellLabel="A1" AbortRate="0.03653935" RecordTime="60" Volume="10" EventsCount="48253" />
     <Statistics>
-      <Statistic Signal="" Population="P2 AND P4" StatisticType="Count" Value="67456" />
-      <Statistic Signal="GFP-A" Population="V1L" StatisticType="Median" Value="785.900024414063" />
-      <Statistic Signal="GFP-A" Population="V1R" StatisticType="Median" Value="25335" />
-      <Statistic Signal="" Population="V1L" StatisticType="PercentOfParent" Value="0.007708729" />
-      <Statistic Signal="" Population="V1R" StatisticType="PercentOfParent" Value="0.9922913" />
-      <Statistic Signal="PE-A" Population="V3L" StatisticType="Median" Value="12.3999996185303" />
-      <Statistic Signal="PE-A" Population="V3R" StatisticType="Median" Value="1555.59997558594" />
-      <Statistic Signal="" Population="V3L" StatisticType="PercentOfParent" Value="0.9998666" />
-      <Statistic Signal="" Population="V3R" StatisticType="PercentOfParent" Value="0.0001334203" />
+      <Statistic Signal="" Population="P2 AND P4" StatisticType="Count" Value="41549" />
+      <Statistic Signal="GFP-A" Population="V1L" StatisticType="Median" Value="712" />
+      <Statistic Signal="GFP-A" Population="V1R" StatisticType="Median" Value="25344" />
+      <Statistic Signal="" Population="V1L" StatisticType="PercentOfParent" Value="0.008134973" />
+      <Statistic Signal="" Population="V1R" StatisticType="PercentOfParent" Value="0.991865" />
+      <Statistic Signal="PE-A" Population="V3L" StatisticType="Median" Value="12.3000001907349" />
+      <Statistic Signal="PE-A" Population="V3R" StatisticType="Median" Value="1840.15002441406" />
+      <Statistic Signal="" Population="V3L" StatisticType="PercentOfParent" Value="0.9997593" />
+      <Statistic Signal="" Population="V3R" StatisticType="PercentOfParent" Value="0.0002406797" />
     </Statistics>
   </DesiredAcquisitionResult>
 </CytExpertAutomation>

@@ -6,7 +6,7 @@ while 1
     check2 = dir('C:\my_git_repo\evotron\matlab\comm_folder_1');
     
     if length(check2)>2
-        system("C:\my_git_repo\evotron\cytoflex\routine\bin\Release\automation_v1.exe");
+        system("C:\my_git_repo\evotron\cytoflex\routine\bin\Release\cyto_control.exe");
         delete('C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit');
         delete('C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file\01-Well-A1.fcs');
         copyfile('C:\my_git_repo\evotron\cytoflex\experiments\sample_experiments\2021_06_23\cyto_expt_file.xit', ...

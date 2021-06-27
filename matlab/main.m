@@ -28,9 +28,9 @@ flush(arduinoComm);
 count = 1;
 %%
 while 1
-tic;    
+tStart = tic;    
 
-%% Sampling loop
+% Sampling loop
 write(arduinoComm,cmdStartSampling,"string");   % send command to arduino to start sampling
 fprintf(logFileID,[datestr(datetime) ' Sent command for sampling\r\n']);
 
@@ -65,7 +65,7 @@ ack = [];
 % flush(arduinoComm);
 % ack = [];
 
-%% if done sampling then start cytoflex acquisition
+% if done sampling then start cytoflex acquisition
 % start cyto acquisition
 fprintf(logFileID,[datestr(datetime) ' Cytoflex acquisition started\r\n']);
 save C:\my_git_repo\evotron\matlab\comm_folder_1\comm_check.mat count
@@ -90,18 +90,18 @@ delete('C:\my_git_repo\evotron\matlab\comm_folder_2\*');
 % delete('C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml');
 % fprintf(logFileID,[datestr(datetime) ' Cytoflex acquisition done\r\n']);
 
-%% if done cytoflex acquisition then
+% if done cytoflex acquisition then
 write(arduinoComm,cmdRemoveSampleAndClean,"string");   % send command to arduino to start sampling
 fprintf(logFileID,[datestr(datetime) ' Sent command for sample removal and cleaning\r\n']);
 
 % extract data from cytoflex acquisition
 % prepare for next acquisition
 
-%% Controller computations
+% Controller computations
 % compute input light intensity
 % send input light intensity to eVOLVER
 
-%% Wait for command from arduino that cleaning is done
+% Wait for command from arduino that cleaning is done
 while(~arduinoComm.NumBytesAvailable)          
 end
 ack = read(arduinoComm,4,"string")             % length of cmdDoneSampling is 4
@@ -114,11 +114,12 @@ end
 flush(arduinoComm);
 ack = [];
 
- 
-toc;
-
 display(['Done sampling: ' num2str(count)]);
 count = count + 1;
 
-pause(1800);
+tElapsed = toc(tStart);
+if tElapsed<1800
+    pause(1800-tElapsed);
+end
+
 end

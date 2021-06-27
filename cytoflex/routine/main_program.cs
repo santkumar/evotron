@@ -16,6 +16,13 @@ namespace cyto_control
             public static bool isTubeRecordResultGenerated = false;
         }
 
+/*        public static class FilePath
+        {
+            public static string exptFile;
+            public static string desiredResultTemplate;
+            public static string acqusitionOutput;
+        }
+*/
         public static void OnActionCompleted(object sender, CytExpertAPI.API.ActionCompletedEventArgs e)
         {
             Console.WriteLine("Action Completed: {0}", e.Message.MessageType);

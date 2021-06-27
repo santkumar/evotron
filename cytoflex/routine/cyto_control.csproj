@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{21323C40-7C72-402D-9841-F12199F0F10F}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>automation_v1</RootNamespace>
-    <AssemblyName>automation_v1</AssemblyName>
+    <RootNamespace>cyto_control</RootNamespace>
+    <AssemblyName>cyto_control</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

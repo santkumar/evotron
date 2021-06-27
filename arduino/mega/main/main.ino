@@ -7,7 +7,7 @@ const int wastePumpSpeedPin = 9;      //PWM
 
 // Durations (in milli-seconds)
 const int t_samplingPumpStart = 500;
-const int t_samplingPumpON = 52000;   //delaying this directly won't work as delay fn max out at 16383 (accurate delay)
+const int t_samplingPumpON = 40000;   //delaying this directly won't work as delay fn max out at 16383 (accurate delay)
 const int t_wastePumpStart = 500;
 const int t_wastePumpON = 10000;
 const int t_waitBleach = 10000;
@@ -116,6 +116,10 @@ void setup() {
   pinMode(samplingPumpEnablePin, OUTPUT);
   digitalWrite(samplingPumpEnablePin, HIGH);
   pinMode(samplingPumpSpeedPin, OUTPUT);
+
+  pinMode(wastePumpDirectionPin, OUTPUT);
+  digitalWrite(wastePumpDirectionPin, HIGH);
+  pinMode(wastePumpSpeedPin, OUTPUT);
 }
 
 // 52 seconds wait
@@ -124,8 +128,6 @@ void waitForEmptyTube(){
   delay(10000);
   delay(10000);
   delay(10000);
-  delay(10000);
-  delay(2000);  
 }
 
 void loop() {
