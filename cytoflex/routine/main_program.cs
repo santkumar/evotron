@@ -16,18 +16,18 @@ namespace cyto_control
             public static bool isTubeRecordResultGenerated = false;
         }
 
-/*        public static class FilePath
+        public static class FilePath
         {
             public static string exptFile;
             public static string desiredResultTemplate;
             public static string acqusitionOutput;
         }
-*/
+
         public static void OnActionCompleted(object sender, CytExpertAPI.API.ActionCompletedEventArgs e)
         {
             Console.WriteLine("Action Completed: {0}", e.Message.MessageType);
             GlobalFlag.isActionComplete = e.Message.ActionSuccess;
-            Console.WriteLine(e.Message.ActionSuccess);
+            // Console.WriteLine(e.Message.ActionSuccess);
         }
         public static void OnStateUpdated(object sender, CytExpertAPI.API.StateUpdatedEventArgs e)
         {
@@ -59,14 +59,22 @@ namespace cyto_control
         {
             Console.WriteLine("On Tube Record Result Generated");
             GlobalFlag.isTubeRecordResultGenerated = e.Message.ActionSuccess;
-            Console.WriteLine(e.Message.ActionSuccess);
-            Console.WriteLine(e.Message);
+            // Console.WriteLine(e.Message.ActionSuccess);
+            // Console.WriteLine(e.Message);
             CytExpertAPI.Messages.TubeRecordGeneratedMessage _tubeRecordGeneratedMessage = (CytExpertAPI.Messages.TubeRecordGeneratedMessage)e.Message;
-            System.IO.File.WriteAllText(@"C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml", _tubeRecordGeneratedMessage.DesiredXmlResult);
+            System.IO.File.WriteAllText(FilePath.acqusitionOutput, _tubeRecordGeneratedMessage.DesiredXmlResult);
         }
 
         static void Main(string[] args)
         {
+            if (args.Count()<3) // 4 arguments needed (file-paths)
+            {
+                throw new Exception("Not enough arguments (Requires file-paths)");
+            }
+            FilePath.exptFile = args[0];
+            FilePath.desiredResultTemplate = args[1];
+            FilePath.acqusitionOutput = args[2];
+
             Console.WriteLine("ALL SYSTEMS NORMINAL");
             CytExpertAPI.API.ICytExpertAutomation _cytExpertAutomation = CytExpertAPI.API.CytExpertAutomationFactory.GetInstance();
             CytExpertAPI.API.ICytExpertAutomationEvent _cytExpertAutomationEvent = _cytExpertAutomation as CytExpertAPI.API.ICytExpertAutomationEvent;
@@ -79,18 +87,18 @@ namespace cyto_control
             }
 
             int check1 = _cytExpertAutomation.Connect(60000, @"C:\Program Files\CytExpert\");
-            Console.WriteLine(check1);
+            // Console.WriteLine(check1);
             while ((GlobalFlag.isServerReady & GlobalFlag.isInstrumentStandBy) == false) ;
             Console.WriteLine("Connection Successful!");
 
-            string strFilePath = @"C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit";            
+            string strFilePath = FilePath.exptFile;            
             int check2 = _cytExpertAutomation.OpenExperiment(strFilePath);
-            Console.WriteLine(check2);
+            // Console.WriteLine(check2);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
 
             int check3 = _cytExpertAutomation.InitializeCytometer();
-            Console.WriteLine(check3);
+            // Console.WriteLine(check3);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
 
@@ -108,18 +116,16 @@ namespace cyto_control
 */
             string _plateID = "testID1234";
             string _plateName = "01";
-            // string _xmlDesiredResult; // = "<?xml version="1.0"?> <CytExpertAutomation Revision="1.0"> <DesiredAcquisitionResults> </DesiredAcquisitionResults> </CytExpertAutomation>";
-            string _xmlDesiredResult = System.IO.File.ReadAllText(@"C:\my_git_repo\evotron\cytoflex\experiments\xml_desired_result.xml");
-            // Console.WriteLine(_xmlDesirecResult);
+            string _xmlDesiredResult = System.IO.File.ReadAllText(FilePath.desiredResultTemplate);
             int check6 =_cytExpertAutomation.AutoRecord(_plateID, _plateName, _xmlDesiredResult, out IEnumerable<string> _xsdErrorList);
-            Console.WriteLine(check6);
+            // Console.WriteLine(check6);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
             // Console.WriteLine(_xsdErrorList.ElementAt(0));
 
             // System.Threading.Thread.Sleep(10000);
             int check7 = _cytExpertAutomation.Disconnect();
-            Console.WriteLine(check7);
+            // Console.WriteLine(check7);
             while (GlobalFlag.isActionComplete == false) ;
             GlobalFlag.isActionComplete = false;
 

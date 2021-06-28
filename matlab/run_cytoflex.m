@@ -1,4 +1,9 @@
 temp = 1;
+executableFile = "C:\my_git_repo\evotron\cytoflex\routine\bin\Release\cyto_control.exe";
+exptFile = "C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit";
+desiredResultFormatFile = "C:\my_git_repo\evotron\cytoflex\experiments\xml_desired_result.xml";
+outputResultFile = "C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml";
+cytoRunCommand = join([executableFile, exptFile, desiredResultFormatFile, outputResultFile]);
 
 while 1
     
@@ -10,7 +15,7 @@ while 1
         load 'C:\my_git_repo\evotron\matlab\comm_folder_1\comm_check.mat';
         
         % Run cytoflex acquisition
-        system("C:\my_git_repo\evotron\cytoflex\routine\bin\Release\cyto_control.exe");
+        system(cytoRunCommand);
         
         % Copy and delete files for next acquisition
         delete('C:\my_git_repo\evotron\cytoflex\experiments\cyto_expt_file.xit');
