@@ -21,53 +21,66 @@ String inputStringComputer = "";         // a string to store incoming data from
 String inputStringOpentron = "";         // a string to store incoming data from Opentron 
 boolean stringCompleteComputer = false;  // whether the string is complete (from Computer)
 boolean stringCompleteOpentron = false;  // whether the string is complete (from Opentron)
+boolean foundStartSequenceComputer = false;
+boolean foundStartSequenceOpentron = false;
+
+char startSequence = '!';
+char endSequence = '?';
 
 // Commands //
 
 String cmdError = "err?";
 
 // Computer comm
-String cmdStartSampling = "ssa?";
-String cmdDoneSampling = "dsa?";
+String cmdStartSampling = "!ssa?";
+String cmdDoneSampling = "!dsa?";
 
-String cmdRemoveSampleAndClean = "rsc?";
-String cmdDoneCleaning = "dcl?";
+String cmdRemoveSampleAndClean = "!rsc?";
+String cmdDoneCleaning = "!dcl?";
 
 // Opentron comm
-String cmdMoveNeedleForSampling = "mns?";
-String cmdDoneMoveNeedleForSampling = "dmn?";
+String cmdMoveNeedleForSampling = "!mns?";
+String cmdDoneMoveNeedleForSampling = "!dmn?";
 
-String cmdStartPreWash = "spr?";
-String cmdDonePreWash = "dpr?";
+String cmdStartPreWash = "!spr?";
+String cmdDonePreWash = "!dpr?";
 
-String cmdStartBleach = "sbl?";
-String cmdDoneBleach = "dbl?";
+String cmdStartBleach = "!sbl?";
+String cmdDoneBleach = "!dbl?";
 
-String cmdStartPostWash = "spo?";
-String cmdDonePostWash = "dpo?";
+String cmdStartPostWash = "!spo?";
+String cmdDonePostWash = "!dpo?";
 
-boolean serialEventComputer() {
-  while (Serial1.available()) {
+void serialEventComputer() {
+  while (Serial1.available()>0 && !stringCompleteComputer) {
     char inChar = (char)Serial1.read();
-    inputStringComputer += inChar;
-    if (inChar == '?') {
-      stringCompleteComputer = true;
-      return true;
+    if (inChar == startSequence){
+      foundStartSequenceComputer = true;
     }
+    if (foundStartSequenceComputer){
+      inputStringComputer += inChar;
+      if (inChar == endSequence) {
+        stringCompleteComputer = true;
+        foundStartSequenceComputer = false;
+      }
+    }        
   }
-  return false;
 }
 
-boolean serialEventOpentron() {
-  while (Serial.available()) {
+void serialEventOpentron() {
+  while (Serial.available()>0 && !stringCompleteOpentron) {
     char inChar = (char)Serial.read();
-    inputStringOpentron += inChar;
-    if (inChar == '?') {
-      stringCompleteOpentron = true;
-      return true;
+    if (inChar == startSequence){
+      foundStartSequenceOpentron = true;
     }
+    if (foundStartSequenceOpentron){
+      inputStringOpentron += inChar;
+      if (inChar == endSequence) {
+        stringCompleteOpentron = true;
+        foundStartSequenceOpentron = false;
+      }
+    }        
   }
-  return false;
 }
 
 boolean compareCmds(String str1, String str2){
@@ -122,7 +135,7 @@ void setup() {
   pinMode(wastePumpSpeedPin, OUTPUT);
 }
 
-// 52 seconds wait
+// 40 seconds wait
 void waitForEmptyTube(){
   delay(10000);
   delay(10000);
@@ -132,98 +145,59 @@ void waitForEmptyTube(){
 
 void loop() {
 
-    while(!serialEventComputer()){} // wait for sampling command from computer
+  serialEventComputer();
+  serialEventOpentron();
 
-    if (stringCompleteComputer){
-      stringCompleteComputer = false;
-      Serial1.print(inputStringComputer);
-//      Serial.print(inputStringComputer);
-
-      if (compareCmds(inputStringComputer,cmdStartSampling)){        
-        inputStringComputer = "";
-        startSamplingPump();
-        Serial.print(cmdMoveNeedleForSampling); // send move needle command to opentron
-
-        while(!serialEventOpentron()){} // wait for done move needle command from opentron
-
-        if (stringCompleteOpentron){
-          stringCompleteOpentron = false;
-
-          Serial1.print(inputStringOpentron);
-
-          if (compareCmds(inputStringOpentron,cmdDoneMoveNeedleForSampling)){
-            inputStringOpentron = "";
-            waitForEmptyTube();          // wait until the whole sample tube is emptied
-            stopSamplingPump();          
-            Serial1.print(cmdDoneSampling);   // send done sampling command to computer
-
-            while(!serialEventComputer()){}   // wait for sample removal and clean command from computer
-
-            if (stringCompleteComputer){
-              stringCompleteComputer = false;
-
-              if (compareCmds(inputStringComputer,cmdRemoveSampleAndClean)){
-                inputStringComputer = ""; 
-
-                removeWaste(); // remove sample from cyto tube
-                
-                startSamplingPump();
-                Serial.print(cmdStartPreWash); // send pre-wash command to opentron
-
-                while(!serialEventOpentron()){} // wait for done pre-wash command from opentron
-
-                if (stringCompleteOpentron){
-                  stringCompleteOpentron = false;
-          
-                  if (compareCmds(inputStringOpentron,cmdDonePreWash)){
-                    inputStringOpentron = "";
-                    waitForEmptyTube();          // wait until the whole sample tube is emptied
-                    stopSamplingPump();
-                    removeWaste();               // remove water from cyto tube
-
-                    startSamplingPump();                              
-                    Serial.print(cmdStartBleach); // send bleach command to opentron
-
-                    while(!serialEventOpentron()){} // wait for done bleach command from opentron
-
-                    if (stringCompleteOpentron){
-                      stringCompleteOpentron = false;
-              
-                      if (compareCmds(inputStringOpentron,cmdDoneBleach)){
-                        inputStringOpentron = "";
-                        waitForEmptyTube();          // wait until the whole sample tube is emptied
-                        stopSamplingPump();
-
-                        delay(t_waitBleach);         // let bleach solution in cyto tube for 10 seconds 
-                        removeWaste();               // remove bleach solution from cyto tube 
-
-                        startSamplingPump();                                  
-                        Serial.print(cmdStartPostWash); // send post-wash command to opentron
-
-                        while(!serialEventOpentron()){} // wait for done post-wash command from opentron
-
-                        if (stringCompleteOpentron){
-                          stringCompleteOpentron = false;
-                  
-                          if (compareCmds(inputStringOpentron,cmdDonePostWash)){
-                            inputStringOpentron = "";
-                            waitForEmptyTube();          // wait until the whole sample tube is emptied
-                            stopSamplingPump();
-                            removeWaste();
-                            
-                            Serial1.print(cmdDoneCleaning);   // send done waste removal and clean command to computer          
-                          }
-                        }
-                      }
-                    }
-                  }
-              }
-          }
-        }
-      }  
+  if (stringCompleteComputer){
+    stringCompleteComputer = false;
+    if (compareCmds(inputStringComputer,cmdStartSampling)){
+      Serial1.print(inputStringComputer); // send ack to computer
+      inputStringComputer = "";
+      startSamplingPump();
+      Serial.print(cmdMoveNeedleForSampling); // send move needle command to opentron      
     }
-  
-}
+    else if (compareCmds(inputStringComputer,cmdRemoveSampleAndClean)){
+      Serial1.print(inputStringComputer); // send ack to computer
+      inputStringComputer = "";
+      removeWaste(); // remove sample from cyto tube
+      startSamplingPump();
+      Serial.print(cmdStartPreWash); // send pre-wash command to opentron
+    }
+                    
+  }
 
-}
+  if (stringCompleteOpentron){
+    stringCompleteOpentron = false;
+    if (compareCmds(inputStringOpentron,cmdDoneMoveNeedleForSampling)){
+      inputStringOpentron = "";
+      waitForEmptyTube();          // wait until the whole sample tube is emptied
+      stopSamplingPump();          
+      Serial1.print(cmdDoneSampling);   // send done sampling command to computer
+    }
+    else if (compareCmds(inputStringOpentron,cmdDonePreWash)){
+      inputStringOpentron = "";
+      waitForEmptyTube();          // wait until the whole sample tube is emptied
+      stopSamplingPump();
+      removeWaste();               // remove water from cyto tube
+      startSamplingPump();                              
+      Serial.print(cmdStartBleach); // send bleach command to opentron
+    }
+    else if (compareCmds(inputStringOpentron,cmdDoneBleach)){
+      inputStringOpentron = "";
+      waitForEmptyTube();          // wait until the whole sample tube is emptied
+      stopSamplingPump();
+      delay(t_waitBleach);         // let bleach solution in cyto tube for 10 seconds 
+      removeWaste();               // remove bleach solution from cyto tube 
+      startSamplingPump();                                  
+      Serial.print(cmdStartPostWash); // send post-wash command to opentron
+    }
+    else if (compareCmds(inputStringOpentron,cmdDonePostWash)){
+      inputStringOpentron = "";
+      waitForEmptyTube();          // wait until the whole sample tube is emptied
+      stopSamplingPump();
+      removeWaste();
+      Serial1.print(cmdDoneCleaning);   // send done waste removal and clean command to computer          
+    }        
+  }
+
 }

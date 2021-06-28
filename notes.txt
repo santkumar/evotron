@@ -1,4 +1,4 @@
-
+24 June 2021
 # 1 ml is too much...try 300 ul: 2 seconds dipping time
 # lower wait times for sampling pump
 # set up evolver computer
@@ -6,3 +6,8 @@
 # order caps
 # save fcs file
 
+25 June 2021
+# sampling pump has issues as it pushes tubing forward...try using old pumps!
+
+28 June 2021
+# waste pump direction pin is not responsive...
