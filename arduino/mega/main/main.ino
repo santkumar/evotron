@@ -4,6 +4,7 @@ const int samplingPumpEnablePin = 2;
 const int samplingPumpSpeedPin = 3;   //PWM
 const int wastePumpDirectionPin = 8;
 const int wastePumpSpeedPin = 9;      //PWM
+const int resetPin = 13;
 
 // Durations (in milli-seconds)
 const int t_samplingPumpStart = 500;
@@ -29,7 +30,8 @@ char endSequence = '?';
 
 // Commands //
 
-String cmdError = "err?";
+String cmdError = "!err?";
+String cmdStopProgram = "!stp?";
 
 // Computer comm
 String cmdStartSampling = "!ssa?";
@@ -126,13 +128,16 @@ void setup() {
   inputStringOpentron.reserve(50);  
   //while(!Serial1);
   //while(!Serial);
-  pinMode(samplingPumpEnablePin, OUTPUT);
   digitalWrite(samplingPumpEnablePin, HIGH);
+  pinMode(samplingPumpEnablePin, OUTPUT);
   pinMode(samplingPumpSpeedPin, OUTPUT);
 
-  pinMode(wastePumpDirectionPin, OUTPUT);
   digitalWrite(wastePumpDirectionPin, HIGH);
+  pinMode(wastePumpDirectionPin, OUTPUT);
   pinMode(wastePumpSpeedPin, OUTPUT);
+
+  digitalWrite(resetPin, HIGH);
+  pinMode(resetPin, OUTPUT);
 }
 
 // 40 seconds wait
@@ -162,6 +167,12 @@ void loop() {
       removeWaste(); // remove sample from cyto tube
       startSamplingPump();
       Serial.print(cmdStartPreWash); // send pre-wash command to opentron
+    }
+    else if (compareCmds(inputStringComputer,cmdStopProgram)){
+      stopSamplingPump();
+      Serial1.print(inputStringComputer); // send ack to computer
+      inputStringComputer = "";
+      digitalWrite(resetPin, LOW); // reset arduino
     }
                     
   }
