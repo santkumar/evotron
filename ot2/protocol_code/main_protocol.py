@@ -4,44 +4,44 @@ from opentrons import protocol_api, types
 
 metadata = {'apiLevel': '2.0'}
 
-xy_locationVial1 = types.Point(111,70.5,245)
-z_locationVial1 = types.Point(111,70.5,235)
+xy_locationVial1 = types.Point(187,70.5,245)
+z_locationVial1 = types.Point(187,70.5,40)
 
-xy_locationPreWash = types.Point(150,150,245)
-z_locationPreWash = types.Point(150,150,235)
+xy_locationPreWash = types.Point(367,52,245)
+z_locationPreWash = types.Point(367,52,90)
 
-xy_locationBleach = types.Point(200,200,245)
-z_locationBleach = types.Point(200,200,235)
+xy_locationBleach = types.Point(367,140,245)
+z_locationBleach = types.Point(367,140,90)
 
-xy_locationPostWash = types.Point(250,250,245)
-z_locationPostWash = types.Point(250,250,235)
+xy_locationPostWash = types.Point(362,230,245)
+z_locationPostWash = types.Point(362,230,90)
 
 xySpeed = 100
 zSpeed = 50
 
-sampleDippingTimeSeconds = 8
-preWashDippingTimeSeconds = 10
-bleachDippingTimeSeconds = 12
-postWashDippingTimeSeconds = 15
+sampleDippingTimeSeconds = 3
+preWashDippingTimeSeconds = 4
+bleachDippingTimeSeconds = 6
+postWashDippingTimeSeconds = 8
 
 IS_NEEDLE_CLEAN = 1
 PRE_WASH_DONE = 0
 BLEACH_DONE = 0
 POST_WASH_DONE = 0
 
-cmdError = "err?"
+cmdError = "!err?"
 
-cmdMoveNeedleForSampling = "mns?"
-cmdDoneMoveNeedleForSampling = "dmn?"
+cmdMoveNeedleForSampling = "!mns?"
+cmdDoneMoveNeedleForSampling = "!dmn?"
 
-cmdStartPreWash = "spr?"
-cmdDonePreWash = "dpr?"
+cmdStartPreWash = "!spr?"
+cmdDonePreWash = "!dpr?"
 
-cmdStartBleach = "sbl?"
-cmdDoneBleach = "dbl?"
+cmdStartBleach = "!sbl?"
+cmdDoneBleach = "!dbl?"
 
-cmdStartPostWash = "spo?"
-cmdDonePostWash = "dpo?"
+cmdStartPostWash = "!spo?"
+cmdDonePostWash = "!dpo?"
 
 
 def collect_sample(protocol,arduino):
@@ -96,6 +96,7 @@ def run(protocol: protocol_api.ProtocolContext):
         time.sleep(0.1)
         if arduino.isOpen():
             print("{} connected!".format(arduino.port))
+            arduino.flush()
             try:
                 while True:
                     while arduino.inWaiting()==0: pass
