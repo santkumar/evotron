@@ -24,9 +24,15 @@ boolean stringCompleteComputer = false;  // whether the string is complete (from
 boolean stringCompleteOpentron = false;  // whether the string is complete (from Opentron)
 boolean foundStartSequenceComputer = false;
 boolean foundStartSequenceOpentron = false;
+boolean receivedCmdSampling = false;
 
 char startSequence = '!';
 char endSequence = '?';
+
+String vialNumString = "";
+char vialNum1 = '1';
+char vialNum2 = '3';
+int vialNum = 5;
 
 // Commands //
 
@@ -42,6 +48,7 @@ String cmdDoneCleaning = "!dcl?";
 
 // Opentron comm
 String cmdMoveNeedleForSampling = "!mns?";
+String cmdWhichVial = "!whv?";
 String cmdDoneMoveNeedleForSampling = "!dmn?";
 
 String cmdStartPreWash = "!spr?";
@@ -159,8 +166,20 @@ void loop() {
       Serial1.print(inputStringComputer); // send ack to computer
       inputStringComputer = "";
       startSamplingPump();
-      Serial.print(cmdMoveNeedleForSampling); // send move needle command to opentron      
+      receivedCmdSampling = true;
     }
+    else if (receivedCmdSampling){
+      Serial1.print(inputStringComputer); // send ack to computer
+      vialNum1 = inputStringComputer[1];
+      vialNum2 = inputStringComputer[2];
+      vialNumString += vialNum1;
+      vialNumString += vialNum2;
+      inputStringComputer = "";
+      vialNum = vialNumString.toInt();
+      vialNumString = "";
+      receivedCmdSampling = false;
+      Serial.print(cmdMoveNeedleForSampling); // send move needle command to opentron
+    }    
     else if (compareCmds(inputStringComputer,cmdRemoveSampleAndClean)){
       Serial1.print(inputStringComputer); // send ack to computer
       inputStringComputer = "";
@@ -179,7 +198,12 @@ void loop() {
 
   if (stringCompleteOpentron){
     stringCompleteOpentron = false;
-    if (compareCmds(inputStringOpentron,cmdDoneMoveNeedleForSampling)){
+    if (compareCmds(inputStringOpentron,cmdWhichVial)){
+      inputStringOpentron = "";
+      delay(1000); // wait for one second
+      Serial.print(vialNum);
+    }
+    else if (compareCmds(inputStringOpentron,cmdDoneMoveNeedleForSampling)){
       inputStringOpentron = "";
       waitForEmptyTube();          // wait until the whole sample tube is emptied
       stopSamplingPump();          
