@@ -9,8 +9,8 @@ z_sample = 40
 z_wash = 90
 
 xy_preWash = [367,52]
-xy_bleach = [367,140]
-xy_postWash = [362,230]
+xy_bleach = [369,142]
+xy_postWash = [362,233]
 
 xySpeed = 100
 zSpeed = 50
