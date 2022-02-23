@@ -57,9 +57,6 @@ String cmdDonePreWash = "!dpr?";
 String cmdStartBleach = "!sbl?";
 String cmdDoneBleach = "!dbl?";
 
-String cmdStartPreWashAndBleach = "!swb?";
-String cmdDonePreWashAndBleach = "!dwb?";
-
 String cmdStartPostWash = "!spo?";
 String cmdDonePostWash = "!dpo?";
 
@@ -150,16 +147,10 @@ void setup() {
   pinMode(resetPin, OUTPUT);
 }
 
-// 40 seconds wait for the sampling tube to be empty and having everything discharged into cytoflex tube
+// 40 seconds wait
 void waitForEmptyTube(){
   delay(10000);
   delay(10000);
-  delay(10000);
-  delay(10000);
-}
-
-// 20 seconds wait for the sampling tube to be empty and having everything discharged into cyto tube (ONLY FOR BLEACH)
-void waitForEmptyTubeBleach(){
   delay(10000);
   delay(10000);
 }
@@ -228,7 +219,7 @@ void loop() {
     }
     else if (compareCmds(inputStringOpentron,cmdDoneBleach)){
       inputStringOpentron = "";
-      waitForEmptyTubeBleach();          // wait until the whole sample tube is emptied
+      waitForEmptyTube();          // wait until the whole sample tube is emptied
       stopSamplingPump();
       delay(t_waitBleach);         // let bleach solution in cyto tube for 10 seconds 
       removeWaste();               // remove bleach solution from cyto tube 
