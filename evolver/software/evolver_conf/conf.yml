@@ -27,7 +27,7 @@ experimental_params:
     fields_expected_incoming: 17
     fields_expected_outgoing: 17
     recurring: true
-    value: [2050.0, 2050.0, 2050.0, 0, 0, 0, 2050.0, 0, 0, 2050, 0, 0, 0, 0, 0, 0]
+    value: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   pump:
     fields_expected_incoming: 49
     fields_expected_outgoing: 49
