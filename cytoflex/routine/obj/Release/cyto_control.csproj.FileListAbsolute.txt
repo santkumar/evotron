@@ -6,4 +6,3 @@ C:\my_git_repo\evotron\cytoflex\routine\obj\Release\cyto_control.csproj.CoreComp
 C:\my_git_repo\evotron\cytoflex\routine\obj\Release\cyto_control.csproj.CopyComplete
 C:\my_git_repo\evotron\cytoflex\routine\obj\Release\cyto_control.exe
 C:\my_git_repo\evotron\cytoflex\routine\obj\Release\cyto_control.pdb
-C:\my_git_repo\evotron\cytoflex\routine\obj\Release\cyto_control.csprojAssemblyReference.cache

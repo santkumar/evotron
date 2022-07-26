@@ -13,7 +13,7 @@ function [] = save_acquisition_files(evolverExptDir, cytoTemplateDir, vialNum, c
     
     % copy acquisition result .xml file to the results directory and delete it
     copyfile('C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml', ...
-        strcat(evolverExptDir, '\sampling_results\vial_', vialNum, '_acquisition_result_', num2str(count), '.xml']);
+        strcat(evolverExptDir, '\sampling_results\vial_', vialNum, '_acquisition_result_', num2str(count), '.xml'));
     delete('C:\my_git_repo\evotron\cytoflex\experiments\acquisition_result.xml');
 
     % copy original template files to the cytoflex experiment directory
