@@ -4,13 +4,13 @@ from opentrons import protocol_api, types
 
 metadata = {'apiLevel': '2.0'}
 
-z_top = 245
-z_sample = 40
-z_wash = 90
+z_top = 245 # top z coordinate for pipette head
+z_sample = 40 # z coordinate for extracting sample from vials (depends on culture volume in vials...sampling needle should dip into the culture while sampling)
+z_wash = 90 # z coordinate for extracting cleaning solution (sampling needle should dip into the cleaning solution)
 
-xy_preWash = [367,52]
-xy_bleach = [369,142]
-xy_postWash = [362,233]
+xy_preWash = [368,51] # xy coordinates for sterile H2O cleaning bottle (pre-wash)
+xy_bleach = [369,141] # xy coordinates for bleach solution bottle
+xy_postWash = [362,232] # xy coordinates for the other sterile H2O cleaning bottle (post-wash)
 
 xySpeed = 100
 zSpeed = 50
@@ -40,13 +40,16 @@ cmdDonePreWash = "!dpr?"
 cmdStartBleach = "!sbl?"
 cmdDoneBleach = "!dbl?"
 
+cmdStartPreWashAndBleach = "!swb?"
+cmdDonePreWashAndBleach = "!dwb?"
+
 cmdStartPostWash = "!spo?"
 cmdDonePostWash = "!dpo?"
 
 
 def collect_sample(protocol,arduino,xCoord,yCoord):
     print("Collecting sample!")
-    protocol._hw_manager.hardware.home()
+    # protocol._hw_manager.hardware.home()
     protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xCoord,yCoord,z_top), speed=xySpeed)
     protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xCoord,yCoord,z_sample), speed=zSpeed)
     time.sleep(sampleDippingTimeSeconds)
@@ -66,11 +69,27 @@ def pre_wash(protocol,arduino):
     return 1
 
 def bleach(protocol,arduino):
+    # print("Started bleach") 
+    # protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_bleach[0],xy_bleach[1],z_top), speed=xySpeed)
+    # protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_bleach[0],xy_bleach[1],z_wash), speed=zSpeed)
+    # time.sleep(bleachDippingTimeSeconds)
+    time.sleep(1)
+    arduino.write(cmdDoneBleach.encode())
+    # protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_bleach[0],xy_bleach[1],z_top), speed=zSpeed)
+    return 1
+
+def pre_wash_and_bleach(protocol,arduino):
+    print("Started pre-wash") 
+    # protocol._hw_manager.hardware.home()
+    protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_preWash[0],xy_preWash[1],z_top), speed=xySpeed)
+    protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_preWash[0],xy_preWash[1],z_wash), speed=zSpeed)
+    time.sleep(preWashDippingTimeSeconds)
+    arduino.write(cmdDonePreWash.encode())
+    protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_preWash[0],xy_preWash[1],z_top), speed=zSpeed)
     print("Started bleach") 
     protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_bleach[0],xy_bleach[1],z_top), speed=xySpeed)
     protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_bleach[0],xy_bleach[1],z_wash), speed=zSpeed)
     time.sleep(bleachDippingTimeSeconds)
-    arduino.write(cmdDoneBleach.encode())
     protocol._hw_manager.hardware.move_to(types.Mount.LEFT, types.Point(xy_bleach[0],xy_bleach[1],z_top), speed=zSpeed)
     return 1
 
@@ -93,7 +112,7 @@ def run(protocol: protocol_api.ProtocolContext):
     global NUM_VIALS
     global SAMPLING_CMD_RECEIVED
 
-    locationFile = open('vial_xy_location.txt', 'r')
+    locationFile = open('/data/custom_protocols/vial_xy_location.txt', 'r')
     lines = locationFile.readlines()
     locationFile.close()
     xyCoordinates = []
@@ -132,7 +151,7 @@ def run(protocol: protocol_api.ProtocolContext):
                                 SAMPLING_CMD_RECEIVED = 0
                                 arduino.write(cmdError.encode())
                         elif ((inputStringArduino.decode('utf-8') == cmdStartPreWash) and (IS_NEEDLE_CLEAN == 0) and (PRE_WASH_DONE == 0)):
-                            if pre_wash(protocol,arduino):
+                            if pre_wash_and_bleach(protocol,arduino):
                                 PRE_WASH_DONE = 1
                                 # arduino.write(cmdDonePreWash.encode())
                             else :

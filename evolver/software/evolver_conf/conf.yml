@@ -1,0 +1,61 @@
+acknowledge_char: a
+broadcast_timing: 20
+calibration: calibration.json
+calibrations_directory: calibrations
+data_response_char: b
+device: evolver-config.json
+echo_response_char: e
+evolver_ip: 192.168.1.2
+experimental_params:
+  lxml:
+    fields_expected_incoming: 17
+    fields_expected_outgoing: 17
+    recurring: false
+    value: ['4095', '4095', '4095', '4095', '4095', '4095', '4095', '4095', '4095',
+      '4095', '4095', '4095', '4095', '4095', '4095', '4095']
+  od_135: {fields_expected_incoming: 17, fields_expected_outgoing: 2, recurring: true,
+    value: '1000'}
+  od_90: {fields_expected_incoming: 17, fields_expected_outgoing: 2, recurring: true,
+    value: '1000'}
+  od_led:
+    fields_expected_incoming: 17
+    fields_expected_outgoing: 17
+    recurring: true
+    value: ['2061', '2065', '2065', '2064', '2061', '2063', '2064', '2057', '2059',
+      '2057', '2063', '2057', '2057', '2057', '2057', '2056']
+  opto_led1:
+    fields_expected_incoming: 17
+    fields_expected_outgoing: 17
+    recurring: true
+    value: [2050.0, 2050.0, 2050.0, 0, 0, 0, 2050.0, 0, 0, 2050, 0, 0, 0, 0, 0, 0]
+  pump:
+    fields_expected_incoming: 49
+    fields_expected_outgoing: 49
+    recurring: false
+    value: ['20', '20', '20', --, --, --, '20', --, --, '20', --, --, --, --, --,
+      --, '20', '20', '20', --, --, --, '20', --, --, '20', --, --, --, --, --, --,
+      --, --, --, --, --, --, --, --, --, --, --, --, --, --, --, --]
+  stir:
+    fields_expected_incoming: 17
+    fields_expected_outgoing: 17
+    recurring: true
+    value: [8, 8, 8, 0, 0, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0]
+  temp:
+    fields_expected_incoming: 17
+    fields_expected_outgoing: 17
+    recurring: true
+    value: ['1646', '1636', '1633', '2245', '2233', '2244', '1614', '2248', '2245',
+      '1647', '2236', '2252', '2249', '2246', '2238', '2257']
+fitted_data_directory: fittedCal
+immediate_command_char: i
+num_sleeves: 16
+od_calibration_directory: od
+port: 8081
+raw_data_directory: rawCal
+recurring_command_char: r
+serial_baudrate: 9600
+serial_end_incoming: end
+serial_end_outgoing: _!
+serial_port: /dev/ttyAMA0
+serial_timeout: 0.3
+temp_calibration_directory: temp
